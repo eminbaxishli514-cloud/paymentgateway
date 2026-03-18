@@ -67,7 +67,7 @@
 
     if (data.card_last_four) {
       cardRow.classList.remove("hidden");
-      document.getElementById("receiptCard").textContent = "•••• " + data.card_last_four;
+      document.getElementById("receiptCardLastFour").textContent = "•••• " + data.card_last_four;
     } else {
       cardRow.classList.add("hidden");
     }
