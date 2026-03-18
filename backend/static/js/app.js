@@ -87,14 +87,13 @@
 
   function toggleCardSection() {
     const method = document.querySelector('input[name="payment_method"]:checked').value;
-    if (method === "card") {
-      cardSection.classList.remove("hidden");
-    } else {
-      cardSection.classList.add("hidden");
-    }
+    cardSection.classList.toggle("hidden", method !== "card");
   }
 
-  methodRadios.forEach((r) => r.addEventListener("change", toggleCardSection));
+  methodRadios.forEach((r) => {
+    r.addEventListener("change", toggleCardSection);
+    r.addEventListener("click", toggleCardSection);
+  });
 
   // Saved card toggle
   savedCardSelect.addEventListener("change", function () {
