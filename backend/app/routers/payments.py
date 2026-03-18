@@ -1,6 +1,6 @@
 """Payment API endpoints."""
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Path, Request
 
 from app.config import settings
 from app.core.limiter import limiter
@@ -21,6 +21,8 @@ router = APIRouter(prefix="/api/payments", tags=["payments"])
 @limiter.limit(settings.rate_limit_payment)
 def validate_promo(request: Request, code: str):
     """Validate a promo code. Returns discount percent and description."""
+    if len(code) > 20 or not code.replace("-", "").replace("_", "").isalnum():
+        raise HTTPException(status_code=400, detail="Invalid promo code format")
     result = payment_service.validate_promo(code)
     if result.get("error"):
         return {"valid": False, "message": result["error"]}
@@ -63,8 +65,9 @@ def get_history():
 
 
 @router.get("/receipt/{payment_id}")
-def get_receipt(payment_id: str):
-    """Get receipt data for a payment. payment_id must match pay_<24 hex chars>."""
+def get_receipt(
+    payment_id: str = Path(..., pattern=r"^pay_[a-f0-9]{24}$", description="Payment ID"),
+):
     """Get receipt data for a payment."""
     data = payment_service.get_receipt_data(payment_id)
     if not data:
@@ -73,7 +76,9 @@ def get_receipt(payment_id: str):
 
 
 @router.get("/{payment_id}")
-def get_payment(payment_id: str):
+def get_payment(
+    payment_id: str = Path(..., pattern=r"^pay_[a-f0-9]{24}$", description="Payment ID"),
+):
     """Retrieve payment details by ID."""
     payment = payment_service.get_payment(payment_id)
     if not payment:

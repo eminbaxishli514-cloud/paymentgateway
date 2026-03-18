@@ -250,7 +250,9 @@ class PaymentService:
         return records
 
     def get_receipt_data(self, payment_id: str) -> dict | None:
-        """Get receipt data for a successful payment."""
+        """Get receipt data for a successful payment. Validates ID format."""
+        if not _validate_payment_id(payment_id):
+            return None
         record = self._payments.get(payment_id)
         if not record or record["status"] not in (
             PaymentStatus.SUCCEEDED,
@@ -262,7 +264,9 @@ class PaymentService:
     def refund_payment(
         self, payment_id: str, amount: float | None = None
     ) -> dict | None:
-        """Refund a payment. Full refund if amount is None."""
+        """Refund a payment. Full refund if amount is None. Validates ID format."""
+        if not _validate_payment_id(payment_id):
+            return None
         record = self._payments.get(payment_id)
         if not record:
             return None

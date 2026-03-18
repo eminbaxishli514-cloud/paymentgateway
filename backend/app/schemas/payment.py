@@ -4,12 +4,7 @@ import re
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field, field_validator, model_validator
-
-
-# Payment ID format: pay_<24 hex chars> or ref_<24 hex chars>
-PAYMENT_ID_PATTERN = re.compile(r"^pay_[a-f0-9]{24}$")
-REFUND_ID_PATTERN = re.compile(r"^ref_[a-f0-9]{24}$")
+from pydantic import BaseModel, Field, field_validator
 
 
 class PaymentMethod(str, Enum):
