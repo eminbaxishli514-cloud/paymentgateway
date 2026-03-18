@@ -28,6 +28,7 @@
 
   // Update displayed amount
   function updateAmounts() {
+    if (!amountInput) return;
     const val = parseFloat(amountInput.value) || 0;
     const pct = appliedPromo ? appliedPromo.percent : 0;
     const discount = val * (pct / 100);
@@ -50,7 +51,7 @@
     }
   }
 
-  amountInput.addEventListener("input", updateAmounts);
+  if (amountInput) amountInput.addEventListener("input", updateAmounts);
 
   // Apply promo code
   applyPromoBtn.addEventListener("click", async function () {
@@ -118,20 +119,24 @@
   form.addEventListener("change", validateForm);
 
   function validateForm() {
+    if (!amountInput) return;
     const method = document.querySelector('input[name="payment_method"]:checked').value;
-    let valid = amountInput.validity.valid && amountInput.value && parseFloat(amountInput.value) > 0;
+    const amount = parseFloat(amountInput.value) || 0;
+    let valid = amount > 0;
 
     if (method === "card") {
       const saved = savedCardSelect.value;
       if (saved) {
         valid = valid && true;
       } else {
+        const month = parseInt(expMonth.value, 10);
+        const year = parseInt(document.getElementById("expYear").value, 10);
         valid =
           valid &&
           document.getElementById("cardholder").value.trim().length >= 2 &&
           cardNumberInput.value.replace(/\s/g, "").length >= 13 &&
-          expMonth.validity.valid &&
-          document.getElementById("expYear").validity.valid &&
+          month >= 1 && month <= 12 &&
+          year >= 24 && year <= 30 &&
           document.getElementById("cvc").value.length >= 3;
       }
     }
