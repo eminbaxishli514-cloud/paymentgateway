@@ -76,6 +76,7 @@ body {
   gap: 0.5rem;
   text-decoration: none;
   color: inherit;
+  margin-left: 0.75rem;
 }
 
 .header-actions {
