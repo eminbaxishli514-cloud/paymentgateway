@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MarketPlace | Shop Online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/store.css">
+</head>
+<body>
+  <div class="page store-page">
+    <header class="header">
+      <div class="header-inner">
+        <a href="/store" class="logo">
+          <span class="logo-icon">🛒</span>
+          <span class="logo-text">MarketPlace</span>
+        </a>
+        <div class="header-actions">
+          <button type="button" id="cartToggle" class="cart-toggle" aria-label="Open cart">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+          <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="theme-icon dark-icon">☀</span>
+            <span class="theme-icon light-icon">☽</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="store-main">
+      <div class="store-hero">
+        <h1>Welcome to MarketPlace</h1>
+        <p class="store-tagline">Browse our selection and add items to your cart</p>
+      </div>
+
+      <div class="products-grid" id="productsGrid">
+        <article class="product-card" data-id="phone">
+          <div class="product-image">📱</div>
+          <div class="product-info">
+            <h3>Smartphone</h3>
+            <p class="product-desc">Latest model, 128GB storage</p>
+            <div class="product-footer">
+              <span class="product-price">$499.00</span>
+              <button type="button" class="btn-add" data-id="phone" data-name="Smartphone" data-price="499.00">Add to cart</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="water">
+          <div class="product-image">💧</div>
+          <div class="product-info">
+            <h3>Bottled Water</h3>
+            <p class="product-desc">24-pack, purified spring water</p>
+            <div class="product-footer">
+              <span class="product-price">$4.99</span>
+              <button type="button" class="btn-add" data-id="water" data-name="Bottled Water" data-price="4.99">Add to cart</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="laptop">
+          <div class="product-image">💻</div>
+          <div class="product-info">
+            <h3>Laptop</h3>
+            <p class="product-desc">15" display, 16GB RAM</p>
+            <div class="product-footer">
+              <span class="product-price">$899.00</span>
+              <button type="button" class="btn-add" data-id="laptop" data-name="Laptop" data-price="899.00">Add to cart</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="headphones">
+          <div class="product-image">🎧</div>
+          <div class="product-info">
+            <h3>Wireless Headphones</h3>
+            <p class="product-desc">Noise cancelling, 30h battery</p>
+            <div class="product-footer">
+              <span class="product-price">$149.00</span>
+              <button type="button" class="btn-add" data-id="headphones" data-name="Wireless Headphones" data-price="149.00">Add to cart</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="watch">
+          <div class="product-image">⌚</div>
+          <div class="product-info">
+            <h3>Smart Watch</h3>
+            <p class="product-desc">Fitness tracking, heart rate monitor</p>
+            <div class="product-footer">
+              <span class="product-price">$199.00</span>
+              <button type="button" class="btn-add" data-id="watch" data-name="Smart Watch" data-price="199.00">Add to cart</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="tablet">
+          <div class="product-image">📱</div>
+          <div class="product-info">
+            <h3>Tablet</h3>
+            <p class="product-desc">10" tablet, 64GB storage</p>
+            <div class="product-footer">
+              <span class="product-price">$349.00</span>
+              <button type="button" class="btn-add" data-id="tablet" data-name="Tablet" data-price="349.00">Add to cart</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- Cart drawer -->
+    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+      <div class="cart-drawer-header">
+        <h2>Your cart</h2>
+        <button type="button" id="cartClose" class="cart-close" aria-label="Close cart">✕</button>
+      </div>
+      <div class="cart-items" id="cartItems">
+        <p class="cart-empty" id="cartEmpty">Your cart is empty</p>
+      </div>
+      <div class="cart-footer" id="cartFooter">
+        <div class="cart-total">
+          <span>Total</span>
+          <span class="cart-total-amount" id="cartTotalAmount">$0.00</span>
+        </div>
+          <a href="/" id="purchaseBtn" class="btn-purchase btn-purchase-disabled">Purchase</a>
+      </div>
+    </aside>
+    <div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
+  </div>
+
+  <script src="/static/js/theme.js"></script>
+  <script src="/static/js/store.js"></script>
+</body>
+</html>

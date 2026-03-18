@@ -31,6 +31,12 @@ def _serve_page(name: str):
     raise HTTPException(status_code=404, detail="Page not found")
 
 
+@app.get("/store")
+def serve_store():
+    """Serve the online marketplace page."""
+    return _serve_page("store")
+
+
 @app.get("/")
 def serve_frontend():
     """Serve the main checkout page."""

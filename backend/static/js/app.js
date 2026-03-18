@@ -17,6 +17,23 @@
 
   let appliedPromo = null; // { percent, description }
 
+  // Pre-fill from URL params (e.g. from store checkout)
+  (function initFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const amount = params.get("amount");
+    const description = params.get("description");
+    if (amount) {
+      const num = parseFloat(amount);
+      if (!isNaN(num) && num > 0) {
+        amountInput.value = num.toFixed(2);
+      }
+    }
+    if (description) {
+      const descEl = document.getElementById("orderDescription");
+      if (descEl) descEl.textContent = description;
+    }
+  })();
+
   // Format card number with spaces
   if (cardNumberInput) {
     cardNumberInput.addEventListener("input", function () {
@@ -180,12 +197,15 @@
     const method = document.querySelector('input[name="payment_method"]:checked').value;
     const savedCard = savedCardSelect.value;
 
+    const descEl = document.getElementById("orderDescription");
+    const description = descEl && descEl.textContent !== "Demo product" ? descEl.textContent : null;
+
     const payload = {
       amount: parseFloat(amountInput.value),
       currency: "USD",
       payment_method: method,
       saved_card_id: savedCard || null,
-      description: null,
+      description: description,
       promo_code: promoInput.value.trim() || null,
     };
 
