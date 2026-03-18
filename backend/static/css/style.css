@@ -323,12 +323,16 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 2.5rem;
+  min-width: 5rem;
+  padding: 0.5rem 0.75rem;
 }
 
 .payment-logo {
   height: 1.5rem;
   width: auto;
+  max-width: 100%;
   object-fit: contain;
+  object-position: center;
   vertical-align: middle;
 }
 
