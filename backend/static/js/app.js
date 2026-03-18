@@ -64,8 +64,8 @@
     try {
       const res = await fetch("/api/payments/promo/" + encodeURIComponent(code));
       const data = await res.json();
-      if (data.valid) {
-        appliedPromo = { percent: data.percent, description: data.description };
+      if (data.valid && data.percent) {
+        appliedPromo = { percent: data.percent, description: data.description || data.percent + "% off" };
         promoInput.classList.add("promo-applied");
         document.getElementById("promoError").textContent = "";
       } else {

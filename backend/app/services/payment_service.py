@@ -64,15 +64,15 @@ class PaymentService:
     def __init__(self):
         self._payments: dict[str, dict] = {}
 
-    def validate_promo(self, code: str | None) -> tuple[float, str | None]:
-        """Return (percent_off, description) or (0, error_message)."""
+    def validate_promo(self, code: str | None) -> dict:
+        """Return {percent, description} or {error}."""
         if not code or not code.strip():
-            return 0, None
+            return {"percent": 0, "description": None}
         code = code.strip().upper()
         if code in PROMO_CODES:
             pct, desc = PROMO_CODES[code]
-            return pct, desc
-        return 0, "Invalid promo code"
+            return {"percent": pct, "description": desc}
+        return {"percent": 0, "error": "Invalid promo code"}
 
     def get_saved_cards(self) -> list[dict]:
         """Return list of saved cards for demo."""
@@ -108,9 +108,8 @@ class PaymentService:
         now = datetime.utcnow()
 
         # Apply promo
-        discount_pct, promo_error = self.validate_promo(request.promo_code)
-        if promo_error:
-            discount_pct = 0
+        promo_result = self.validate_promo(request.promo_code)
+        discount_pct = promo_result.get("percent", 0) if "error" not in promo_result else 0
         discount = request.amount * (discount_pct / 100)
         total = request.amount - discount
 

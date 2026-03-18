@@ -10,22 +10,11 @@ function initTheme() {
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const initial = stored || (prefersDark ? "dark" : "light");
   document.documentElement.setAttribute("data-theme", initial);
-  updateToggleIcon(initial);
 
   toggle.addEventListener("click", function () {
     const current = document.documentElement.getAttribute("data-theme");
     const next = current === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
-    updateToggleIcon(next);
   });
-}
-
-function updateToggleIcon(theme) {
-  const darkIcon = document.querySelector(".theme-icon.dark-icon");
-  const lightIcon = document.querySelector(".theme-icon.light-icon");
-  if (darkIcon && lightIcon) {
-    darkIcon.style.display = theme === "dark" ? "inline" : "none";
-    lightIcon.style.display = theme === "light" ? "inline" : "none";
-  }
 }

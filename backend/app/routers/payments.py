@@ -18,10 +18,10 @@ router = APIRouter(prefix="/api/payments", tags=["payments"])
 @router.get("/promo/{code}")
 def validate_promo(code: str):
     """Validate a promo code. Returns discount percent and description."""
-    pct, error = payment_service.validate_promo(code)
-    if error:
-        return {"valid": False, "message": error}
-    return {"valid": True, "percent": pct, "description": f"{pct}% off"}
+    result = payment_service.validate_promo(code)
+    if result.get("error"):
+        return {"valid": False, "message": result["error"]}
+    return {"valid": True, "percent": result["percent"], "description": result["description"]}
 
 
 @router.get("/saved-cards")
