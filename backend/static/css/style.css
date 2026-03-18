@@ -322,7 +322,7 @@ body {
 .card-section {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.1rem;
 }
 
 .card-section.hidden {
@@ -352,7 +352,7 @@ body {
 .new-card-fields {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.1rem;
 }
 
 /* Promo */
@@ -398,13 +398,13 @@ body {
 .payment-form {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.1rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.08rem;
 }
 
 .form-group label {
