@@ -13,11 +13,15 @@
   const savedCardSelect = document.getElementById("savedCard");
   const resultCard = document.getElementById("result");
 
-  // Pre-fill from URL params (e.g. from store checkout)
-  (function initFromUrl() {
-    const params = new URLSearchParams(window.location.search);
-    const amount = params.get("amount");
-    const description = params.get("description");
+  // Pre-fill from sessionStorage (store checkout) or URL params (fallback)
+  (function initCheckoutData() {
+    let amount = sessionStorage.getItem("checkout_amount");
+    let description = sessionStorage.getItem("checkout_description");
+    if (!amount || !description) {
+      const params = new URLSearchParams(window.location.search);
+      amount = amount || params.get("amount");
+      description = description || params.get("description");
+    }
     if (amount) {
       const num = parseFloat(amount);
       if (!isNaN(num) && num > 0) {
@@ -27,6 +31,9 @@
     if (description) {
       const descEl = document.getElementById("orderDescription");
       if (descEl) descEl.textContent = description;
+    }
+    if (window.location.search) {
+      history.replaceState({}, "", window.location.pathname);
     }
   })();
 
@@ -186,11 +193,15 @@
       }
 
       if (data.requires_verification) {
+        sessionStorage.removeItem("checkout_amount");
+        sessionStorage.removeItem("checkout_description");
         window.location.href = "/verify?payment_id=" + encodeURIComponent(data.id);
         return;
       }
 
       if (data.status === "succeeded") {
+        sessionStorage.removeItem("checkout_amount");
+        sessionStorage.removeItem("checkout_description");
         window.location.href = "/receipt?payment_id=" + encodeURIComponent(data.id);
         return;
       }

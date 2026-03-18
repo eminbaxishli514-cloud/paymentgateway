@@ -107,6 +107,7 @@
       container.querySelectorAll(".cart-item").forEach((el) => el.remove());
       footer.style.display = "none";
       purchaseBtn.classList.add("btn-purchase-disabled");
+      purchaseBtn.onclick = null;
       return;
     }
 
@@ -143,8 +144,8 @@
     document.getElementById("cartTotalAmount").textContent =
       new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(total);
 
-    const checkoutUrl = buildCheckoutUrl();
-    purchaseBtn.href = checkoutUrl;
+    purchaseBtn.href = "/";
+    purchaseBtn.onclick = goToCheckout;
 
     container.querySelectorAll(".cart-item-btn").forEach((btn) => {
       btn.addEventListener("click", function () {
@@ -157,13 +158,16 @@
     });
   }
 
-  function buildCheckoutUrl() {
+  const CHECKOUT_AMOUNT_KEY = "checkout_amount";
+  const CHECKOUT_DESC_KEY = "checkout_description";
+
+  function goToCheckout(e) {
+    e.preventDefault();
     const total = getTotal();
     const desc = getDescription();
-    const params = new URLSearchParams();
-    params.set("amount", total.toFixed(2));
-    if (desc) params.set("description", desc);
-    return "/?" + params.toString();
+    sessionStorage.setItem(CHECKOUT_AMOUNT_KEY, total.toFixed(2));
+    sessionStorage.setItem(CHECKOUT_DESC_KEY, desc);
+    window.location.href = "/";
   }
 
   function escapeHtml(str) {
