@@ -185,7 +185,7 @@
       currency: "USD",
       payment_method: method,
       saved_card_id: savedCard || null,
-      description: document.getElementById("description").value.trim() || null,
+      description: null,
       promo_code: promoInput.value.trim() || null,
     };
 
