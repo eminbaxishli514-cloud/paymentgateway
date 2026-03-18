@@ -89,6 +89,16 @@
   function toggleCardSection() {
     const method = document.querySelector('input[name="payment_method"]:checked').value;
     cardSection.classList.toggle("hidden", method !== "card");
+    updateSubmitButtonText();
+  }
+
+  function updateSubmitButtonText() {
+    const method = document.querySelector('input[name="payment_method"]:checked').value;
+    const btnText = submitBtn.querySelector(".btn-text");
+    if (!btnText) return;
+    if (method === "paypal") btnText.textContent = "Pay with PayPal";
+    else if (method === "apple_pay") btnText.textContent = "Pay with Apple Pay";
+    else btnText.textContent = "Pay";
   }
 
   methodRadios.forEach((r) => {
