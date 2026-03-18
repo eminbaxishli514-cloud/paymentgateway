@@ -70,5 +70,4 @@
   }
 
   loadHistory();
-  initTheme();
 })();

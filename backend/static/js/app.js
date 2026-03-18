@@ -239,5 +239,4 @@
   toggleCardSection();
   updateAmounts();
   validateForm();
-  initTheme();
 })();
