@@ -1,6 +1,6 @@
 /**
  * Payment form handling and API integration.
- * Supports multiple payment methods, saved cards, promo codes, and SMS verification flow.
+ * Supports multiple payment methods, saved cards, and SMS verification flow.
  */
 
 (function () {
@@ -11,11 +11,7 @@
   const amountInput = document.getElementById("amount");
   const cardNumberInput = document.getElementById("cardNumber");
   const savedCardSelect = document.getElementById("savedCard");
-  const promoInput = document.getElementById("promoCode");
-  const applyPromoBtn = document.getElementById("applyPromo");
   const resultCard = document.getElementById("result");
-
-  let appliedPromo = null; // { percent, description }
 
   // Pre-fill from URL params (e.g. from store checkout)
   (function initFromUrl() {
@@ -47,56 +43,13 @@
   function updateAmounts() {
     if (!amountInput) return;
     const val = parseFloat(amountInput.value) || 0;
-    const pct = appliedPromo ? appliedPromo.percent : 0;
-    const discount = val * (pct / 100);
-    const total = val - discount;
-
     const fmt = (n) =>
       new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
-
     document.getElementById("displayAmount").textContent = fmt(val);
-    document.getElementById("displayDiscount").textContent = discount > 0 ? "-" + fmt(discount) : "$0.00";
-    document.getElementById("displayTotal").textContent = fmt(total);
-
-    const promoRow = document.getElementById("promoRow");
-    const promoLabel = document.getElementById("promoLabel");
-    if (appliedPromo) {
-      promoRow.classList.remove("hidden");
-      promoLabel.textContent = "(" + appliedPromo.description + ")";
-    } else {
-      promoRow.classList.add("hidden");
-    }
+    document.getElementById("displayTotal").textContent = fmt(val);
   }
 
   if (amountInput) amountInput.addEventListener("input", updateAmounts);
-
-  // Apply promo code
-  applyPromoBtn.addEventListener("click", async function () {
-    const code = promoInput.value.trim();
-    document.getElementById("promoError").textContent = "";
-    if (!code) {
-      appliedPromo = null;
-      updateAmounts();
-      return;
-    }
-    try {
-      const res = await fetch("/api/payments/promo/" + encodeURIComponent(code));
-      const data = await res.json();
-      if (data.valid && data.percent) {
-        appliedPromo = { percent: data.percent, description: data.description || data.percent + "% off" };
-        promoInput.classList.add("promo-applied");
-        document.getElementById("promoError").textContent = "";
-      } else {
-        appliedPromo = null;
-        promoInput.classList.remove("promo-applied");
-        document.getElementById("promoError").textContent = data.message || "Invalid code";
-      }
-    } catch {
-      appliedPromo = null;
-      document.getElementById("promoError").textContent = "Could not validate code";
-    }
-    updateAmounts();
-  });
 
   // Payment method toggle
   const methodRadios = document.querySelectorAll('input[name="payment_method"]');
@@ -206,7 +159,6 @@
       payment_method: method,
       saved_card_id: savedCard || null,
       description: description,
-      promo_code: promoInput.value.trim() || null,
     };
 
     if (method === "card" && !savedCard) {
