@@ -1,7 +1,9 @@
 """Payment API endpoints."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
+from app.config import settings
+from app.core.limiter import limiter
 from app.schemas.payment import (
     PaymentRequest,
     PaymentResponse,
@@ -16,7 +18,8 @@ router = APIRouter(prefix="/api/payments", tags=["payments"])
 
 
 @router.get("/promo/{code}")
-def validate_promo(code: str):
+@limiter.limit(settings.rate_limit_payment)
+def validate_promo(request: Request, code: str):
     """Validate a promo code. Returns discount percent and description."""
     result = payment_service.validate_promo(code)
     if result.get("error"):
@@ -31,21 +34,23 @@ def list_saved_cards():
 
 
 @router.post("/", response_model=PaymentResponse)
-def create_payment(request: PaymentRequest) -> PaymentResponse:
+@limiter.limit(settings.rate_limit_payment)
+def create_payment(request: Request, body: PaymentRequest) -> PaymentResponse:
     """
     Process a new payment. Card payments require SMS verification.
     Use card 4242 for success, 0000 for decline. Promo: DEMO10, SAVE20, HALFOFF.
     """
-    return payment_service.process_payment(request)
+    return payment_service.process_payment(body)
 
 
 @router.post("/verify", response_model=VerifyResponse)
-def verify_sms(request: VerifyRequest) -> VerifyResponse:
+@limiter.limit(settings.rate_limit_payment)
+def verify_sms(request: Request, body: VerifyRequest) -> VerifyResponse:
     """Verify SMS code to complete a pending payment. Demo code: 123456"""
-    success, message = payment_service.verify_sms(request.payment_id, request.code)
+    success, message = payment_service.verify_sms(body.payment_id, body.code)
     return VerifyResponse(
         success=success,
-        payment_id=request.payment_id,
+        payment_id=body.payment_id,
         message=message,
     )
 
@@ -59,6 +64,7 @@ def get_history():
 
 @router.get("/receipt/{payment_id}")
 def get_receipt(payment_id: str):
+    """Get receipt data for a payment. payment_id must match pay_<24 hex chars>."""
     """Get receipt data for a payment."""
     data = payment_service.get_receipt_data(payment_id)
     if not data:
@@ -76,9 +82,10 @@ def get_payment(payment_id: str):
 
 
 @router.post("/refund", response_model=RefundResponse)
-def refund_payment(request: RefundRequest) -> RefundResponse:
+@limiter.limit(settings.rate_limit_payment)
+def refund_payment(request: Request, body: RefundRequest) -> RefundResponse:
     """Refund a payment. Omit amount for full refund."""
-    result = payment_service.refund_payment(request.payment_id, request.amount)
+    result = payment_service.refund_payment(body.payment_id, body.amount)
     if not result:
         raise HTTPException(
             status_code=400,

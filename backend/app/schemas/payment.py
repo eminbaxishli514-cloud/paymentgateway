@@ -1,9 +1,15 @@
 """Payment-related request and response schemas."""
 
+import re
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator, model_validator
+
+
+# Payment ID format: pay_<24 hex chars> or ref_<24 hex chars>
+PAYMENT_ID_PATTERN = re.compile(r"^pay_[a-f0-9]{24}$")
+REFUND_ID_PATTERN = re.compile(r"^ref_[a-f0-9]{24}$")
 
 
 class PaymentMethod(str, Enum):
@@ -30,7 +36,7 @@ class PaymentRequest(BaseModel):
     amount: float = Field(..., gt=0, le=999999.99, description="Amount in currency units")
     currency: str = Field(default="USD", min_length=3, max_length=3)
     payment_method: PaymentMethod = Field(default=PaymentMethod.CARD)
-    saved_card_id: str | None = Field(default=None, description="Use saved card if provided")
+    saved_card_id: str | None = Field(default=None, max_length=50)
     card_number: str | None = Field(default=None, min_length=13, max_length=19)
     card_exp_month: int | None = Field(default=None, ge=1, le=12)
     card_exp_year: int | None = Field(default=None, ge=2024, le=2030)
@@ -38,6 +44,34 @@ class PaymentRequest(BaseModel):
     cardholder_name: str | None = Field(default=None, min_length=2, max_length=100)
     description: str | None = Field(default=None, max_length=500)
     promo_code: str | None = Field(default=None, max_length=20)
+
+    @field_validator("card_number")
+    @classmethod
+    def card_number_digits_only(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
+        cleaned = re.sub(r"\s", "", v)
+        if not re.match(r"^\d{13,19}$", cleaned):
+            raise ValueError("Card number must contain 13-19 digits")
+        return cleaned
+
+    @field_validator("card_cvc")
+    @classmethod
+    def card_cvc_digits_only(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
+        if not re.match(r"^\d{3,4}$", v):
+            raise ValueError("CVC must be 3 or 4 digits")
+        return v
+
+    @field_validator("currency")
+    @classmethod
+    def currency_valid(cls, v: str) -> str:
+        allowed = {"USD", "EUR", "GBP"}
+        normalized = (v or "USD").upper()
+        if normalized not in allowed:
+            raise ValueError(f"Currency must be one of: {', '.join(allowed)}")
+        return normalized
 
 
 class PaymentResponse(BaseModel):
@@ -57,8 +91,15 @@ class PaymentResponse(BaseModel):
 class VerifyRequest(BaseModel):
     """SMS verification request."""
 
-    payment_id: str
+    payment_id: str = Field(..., max_length=50)
     code: str = Field(..., min_length=4, max_length=8)
+
+    @field_validator("code")
+    @classmethod
+    def code_digits_only(cls, v: str) -> str:
+        if not re.match(r"^\d{4,8}$", v):
+            raise ValueError("Verification code must be 4-8 digits")
+        return v
 
 
 class VerifyResponse(BaseModel):
@@ -72,9 +113,9 @@ class VerifyResponse(BaseModel):
 class RefundRequest(BaseModel):
     """Request to refund an existing payment."""
 
-    payment_id: str
+    payment_id: str = Field(..., max_length=50)
     amount: float | None = Field(
-        default=None, gt=0, description="Partial refund amount, or full if omitted"
+        default=None, gt=0, le=999999.99, description="Partial refund amount, or full if omitted"
     )
     reason: str | None = Field(default=None, max_length=200)
 

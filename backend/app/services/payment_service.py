@@ -1,5 +1,6 @@
 """Payment processing logic. In production, this would integrate with real gateways."""
 
+import re
 import uuid
 from datetime import datetime
 
@@ -53,6 +54,14 @@ SAVED_CARD_DETAILS = {
 
 # SMS code that always works
 VALID_SMS_CODE = "123456"
+
+# Payment ID format validation
+PAYMENT_ID_PATTERN = re.compile(r"^pay_[a-f0-9]{24}$")
+
+
+def _validate_payment_id(payment_id: str) -> bool:
+    """Validate payment ID format to prevent injection."""
+    return bool(PAYMENT_ID_PATTERN.match(payment_id)) if payment_id else False
 
 
 class PaymentService:
@@ -215,6 +224,8 @@ class PaymentService:
 
     def verify_sms(self, payment_id: str, code: str) -> tuple[bool, str]:
         """Verify SMS code and complete payment. Returns (success, message)."""
+        if not _validate_payment_id(payment_id):
+            return False, "Invalid payment ID"
         record = self._payments.get(payment_id)
         if not record:
             return False, "Payment not found"
@@ -227,7 +238,9 @@ class PaymentService:
         return False, "Invalid verification code"
 
     def get_payment(self, payment_id: str) -> dict | None:
-        """Retrieve a payment by ID."""
+        """Retrieve a payment by ID. Validates ID format."""
+        if not _validate_payment_id(payment_id):
+            return None
         return self._payments.get(payment_id)
 
     def get_transaction_history(self) -> list[dict]:

@@ -14,6 +14,12 @@
     headphones: "🎧",
     watch: "⌚",
     tablet: "📱",
+    keyboard: "⌨️",
+    monitor: "🖥️",
+    webcam: "📹",
+    speaker: "🔊",
+    usb_hub: "🔌",
+    mouse: "🖱️",
   };
 
   let cart = loadCart();
