@@ -318,6 +318,37 @@ body {
   border-color: var(--border-focus);
 }
 
+.method-card-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+}
+
+.payment-logo {
+  height: 1.5rem;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.payment-logo-paypal {
+  height: 1.25rem;
+}
+
+.payment-logo-apple {
+  height: 1.5rem;
+}
+
+[data-theme="dark"] .payment-logo-apple,
+:root .payment-logo-apple {
+  filter: brightness(0) invert(1);
+}
+
+[data-theme="light"] .payment-logo-apple {
+  filter: none;
+}
+
 /* Card section */
 .card-section {
   display: flex;
