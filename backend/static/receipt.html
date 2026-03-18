@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipt | PayFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header-inner">
+        <a href="/" class="logo">
+          <span class="logo-icon">◆</span>
+          <span class="logo-text">PayFlow</span>
+        </a>
+        <div class="header-actions">
+          <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="theme-icon dark-icon">☀</span>
+            <span class="theme-icon light-icon">☽</span>
+          </button>
+          <a href="/history" class="header-link">History</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="main receipt-main">
+      <div class="progress-steps">
+        <div class="step completed" data-step="1">
+          <span class="step-num">1</span>
+          <span class="step-label">Payment</span>
+        </div>
+        <div class="step-line completed"></div>
+        <div class="step completed" data-step="2">
+          <span class="step-num">2</span>
+          <span class="step-label">Verify</span>
+        </div>
+        <div class="step-line completed"></div>
+        <div class="step active completed" data-step="3">
+          <span class="step-num">3</span>
+          <span class="step-label">Complete</span>
+        </div>
+      </div>
+
+      <div id="receiptCard" class="receipt-card hidden">
+        <div class="receipt-header">
+          <span class="receipt-success">✓ Payment successful</span>
+          <button type="button" id="downloadReceipt" class="btn-secondary">Download receipt</button>
+        </div>
+        <div class="receipt-body">
+          <div class="receipt-row">
+            <span>Payment ID</span>
+            <span class="mono" id="receiptId"></span>
+          </div>
+          <div class="receipt-row">
+            <span>Date</span>
+            <span id="receiptDate"></span>
+          </div>
+          <div class="receipt-row">
+            <span>Amount</span>
+            <span id="receiptAmount"></span>
+          </div>
+          <div class="receipt-row" id="receiptDiscountRow">
+            <span>Discount</span>
+            <span id="receiptDiscount"></span>
+          </div>
+          <div class="receipt-row total">
+            <span>Total paid</span>
+            <span id="receiptTotal"></span>
+          </div>
+          <div class="receipt-row">
+            <span>Payment method</span>
+            <span id="receiptMethod"></span>
+          </div>
+          <div class="receipt-row" id="receiptCardRow">
+            <span>Card</span>
+            <span id="receiptCard"></span>
+          </div>
+        </div>
+        <div class="receipt-actions">
+          <a href="/" class="submit-btn">New payment</a>
+          <a href="/history" class="btn-secondary">View history</a>
+        </div>
+      </div>
+
+      <div id="receiptError" class="result-card error hidden">
+        <div class="result-icon">✕</div>
+        <h3>Receipt not found</h3>
+        <p>This payment may not exist or has not been completed.</p>
+        <a href="/" class="submit-btn" style="display: inline-block; margin-top: 1rem;">Back to checkout</a>
+      </div>
+
+      <div id="receiptLoading" class="receipt-loading">
+        <span class="spinner large"></span>
+        <p>Loading receipt…</p>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>This is a demonstration. No real payments are processed.</p>
+    </footer>
+  </div>
+
+  <script src="/static/js/theme.js"></script>
+  <script src="/static/js/receipt.js"></script>
+</body>
+</html>

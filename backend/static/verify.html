@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Payment | PayFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header-inner">
+        <a href="/" class="logo">
+          <span class="logo-icon">◆</span>
+          <span class="logo-text">PayFlow</span>
+        </a>
+        <div class="header-actions">
+          <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="theme-icon dark-icon">☀</span>
+            <span class="theme-icon light-icon">☽</span>
+          </button>
+          <span class="header-badge">Demo</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main verify-main">
+      <div class="progress-steps">
+        <div class="step completed" data-step="1">
+          <span class="step-num">1</span>
+          <span class="step-label">Payment</span>
+        </div>
+        <div class="step-line completed"></div>
+        <div class="step active" data-step="2">
+          <span class="step-num">2</span>
+          <span class="step-label">Verify</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">
+          <span class="step-num">3</span>
+          <span class="step-label">Complete</span>
+        </div>
+      </div>
+
+      <div class="verify-card">
+        <h1>SMS verification</h1>
+        <p>We've sent a 6-digit code to your phone. Enter it below to complete your payment.</p>
+        <p class="verify-hint">Demo: use code <strong>123456</strong></p>
+
+        <form id="verifyForm" class="verify-form">
+          <div class="form-group">
+            <label for="smsCode">Verification code</label>
+            <input type="text" id="smsCode" name="code" placeholder="123456" maxlength="8" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+            <span class="field-error" id="codeError"></span>
+          </div>
+          <button type="submit" id="verifyBtn" class="submit-btn">
+            <span class="btn-text">Verify & pay</span>
+            <span class="btn-loading" aria-hidden="true">
+              <span class="spinner"></span>
+              Verifying…
+            </span>
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>This is a demonstration. No real payments are processed.</p>
+    </footer>
+  </div>
+
+  <script src="/static/js/theme.js"></script>
+  <script src="/static/js/verify.js"></script>
+</body>
+</html>
