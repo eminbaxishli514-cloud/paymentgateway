@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · SIEM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header-inner">
+        <a href="/" class="logo">
+          <span class="logo-icon">◆</span>
+          <span class="logo-text">PayFlow</span>
+        </a>
+        <div class="header-actions">
+          <a href="/" class="header-link">Checkout</a>
+          <a href="/store" class="header-link">Store</a>
+          <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="theme-icon dark-icon">☀</span>
+            <span class="theme-icon light-icon">☽</span>
+          </button>
+          <span class="header-badge">SIEM</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main admin-main">
+      <div class="hero">
+        <h1>Security operations · SIEM</h1>
+        <p class="admin-sub">In-memory demo SIEM: request visibility, suspicious traffic, IP blocklist. Set <code>ADMIN_API_KEY</code> on the server.</p>
+      </div>
+
+      <div class="checkout-card admin-auth-card" id="authCard">
+        <h2>Authenticate</h2>
+        <p class="field-hint">Enter the same value as server env <code>ADMIN_API_KEY</code> (default demo: <code>change-me-in-production</code>).</p>
+        <div class="form-group">
+          <label for="adminToken">Admin token</label>
+          <input type="password" id="adminToken" autocomplete="off" placeholder="X-Admin-Token value">
+        </div>
+        <button type="button" id="saveToken" class="submit-btn">Save &amp; load dashboard</button>
+      </div>
+
+      <div id="dashboard" class="hidden">
+        <div class="checkout-card admin-summary">
+          <h2>Overview</h2>
+          <div id="summaryStats" class="admin-stats"></div>
+        </div>
+
+        <div class="checkout-card">
+          <h2>Top IPs (last 5 min)</h2>
+          <p class="field-hint">Rows marked suspicious exceed the configured requests/minute threshold.</p>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="ipTable">
+              <thead>
+                <tr>
+                  <th>IP</th>
+                  <th>60s</th>
+                  <th>5m</th>
+                  <th>Last path</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="checkout-card">
+          <h2>Blocked IPs</h2>
+          <ul id="blockedList" class="admin-blocked-list"></ul>
+        </div>
+
+        <div class="checkout-card">
+          <h2>Recent events</h2>
+          <button type="button" id="refreshEvents" class="btn-secondary">Refresh</button>
+          <div class="admin-table-wrap admin-events">
+            <table class="admin-table" id="eventsTable">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>IP</th>
+                  <th>Method</th>
+                  <th>Path</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <p id="adminError" class="field-error admin-error" role="alert"></p>
+    </main>
+  </div>
+
+  <script src="/static/js/theme.js"></script>
+  <script src="/static/js/admin.js"></script>
+</body>
+</html>

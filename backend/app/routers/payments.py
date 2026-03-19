@@ -66,7 +66,7 @@ def get_history():
 
 @router.get("/receipt/{payment_id}")
 def get_receipt(
-    payment_id: str = Path(..., pattern=r"^pay_[a-f0-9]{24}$", description="Payment ID"),
+    payment_id: str = Path(..., pattern=r"^pay_[a-f0-9]{32}$", description="Payment ID"),
 ):
     """Get receipt data for a payment."""
     data = payment_service.get_receipt_data(payment_id)
@@ -77,7 +77,7 @@ def get_receipt(
 
 @router.get("/{payment_id}")
 def get_payment(
-    payment_id: str = Path(..., pattern=r"^pay_[a-f0-9]{24}$", description="Payment ID"),
+    payment_id: str = Path(..., pattern=r"^pay_[a-f0-9]{32}$", description="Payment ID"),
 ):
     """Retrieve payment details by ID."""
     payment = payment_service.get_payment(payment_id)

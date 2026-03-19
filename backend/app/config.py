@@ -24,6 +24,13 @@ class Settings(BaseSettings):
     rate_limit_payment: str = "10/minute"  # Stricter for payment endpoints
     max_request_size: int = 1_000_000  # 1MB max body
 
+    # Admin / SIEM API — send header X-Admin-Token with this value
+    admin_api_key: str = "change-me-in-production"
+
+    # SIEM: flag IP if this many requests in 60s (rolling window)
+    siem_suspicious_rpm: int = 60
+    siem_critical_rpm: int = 200
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"

@@ -1,7 +1,7 @@
 """Payment processing logic. In production, this would integrate with real gateways."""
 
 import re
-import uuid
+import secrets
 from datetime import datetime
 
 from app.schemas.payment import (
@@ -55,8 +55,8 @@ SAVED_CARD_DETAILS = {
 # SMS code that always works
 VALID_SMS_CODE = "123456"
 
-# Payment ID format validation
-PAYMENT_ID_PATTERN = re.compile(r"^pay_[a-f0-9]{24}$")
+# Payment ID: pay_ + 32 hex chars (128-bit random from secrets.token_hex(16))
+PAYMENT_ID_PATTERN = re.compile(r"^pay_[a-f0-9]{32}$")
 
 
 def _validate_payment_id(payment_id: str) -> bool:
@@ -113,7 +113,7 @@ class PaymentService:
         Process a payment. Returns success, failure, or pending_verification.
         Card 4242 succeeds, 0000 fails. Card payments require SMS verification.
         """
-        payment_id = f"pay_{uuid.uuid4().hex[:24]}"
+        payment_id = f"pay_{secrets.token_hex(16)}"
         now = datetime.utcnow()
 
         # Apply promo
@@ -277,7 +277,7 @@ class PaymentService:
         if refund_amount > record["total"]:
             return None
 
-        refund_id = f"ref_{uuid.uuid4().hex[:24]}"
+        refund_id = f"ref_{secrets.token_hex(16)}"
         record["status"] = PaymentStatus.REFUNDED
 
         return {

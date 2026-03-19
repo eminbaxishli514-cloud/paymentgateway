@@ -14,8 +14,9 @@ from slowapi.middleware import SlowAPIMiddleware
 
 from app.config import settings
 from app.core.limiter import limiter
-from app.routers import payments
+from app.routers import admin, payments
 from app.middleware.security import SecurityHeadersMiddleware
+from app.middleware.siem_middleware import SIEMMiddleware
 from app.core.exceptions import generic_exception_handler, validation_exception_handler
 
 # Configure logging
@@ -39,7 +40,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, generic_exception_handler)
 
-# Middleware order: last added = first executed (reverse order)
+# Middleware order: last added = first executed on incoming request
 app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(
@@ -49,7 +50,9 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
+app.add_middleware(SIEMMiddleware)  # blocklist + request logging (runs first inbound)
 
+app.include_router(admin.router)
 app.include_router(payments.router)
 
 # Serve static assets
@@ -94,6 +97,12 @@ def serve_receipt():
 def serve_history():
     """Serve the transaction history page."""
     return _serve_page("history")
+
+
+@app.get("/admin")
+def serve_admin():
+    """Admin / SIEM dashboard (set ADMIN_API_KEY, use X-Admin-Token in UI)."""
+    return _serve_page("admin")
 
 
 @app.get("/health")
