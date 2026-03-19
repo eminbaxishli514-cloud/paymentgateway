@@ -39,6 +39,12 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) for the checkout page.
 - `/verify?payment_id=xxx` — SMS verification (opens after Pay for card)
 - `/receipt?payment_id=xxx` — Receipt
 - `/history` — Transaction history
+- `/store` — Marketplace
+- `/admin` — **SIEM / security dashboard** (in-memory demo: traffic, suspicious IPs, blocklist). Set `ADMIN_API_KEY` and paste it in the UI as the admin token.
+
+### SIEM (demo)
+
+Lightweight in-app SIEM: logs API and main page hits, aggregates per IP, flags high request rates (`SIEM_SUSPICIOUS_RPM` / `SIEM_CRITICAL_RPM`), and lets you block IPs (403 for blocked clients). Data is **in memory** only. For production, stream logs to Splunk, Elastic, Datadog, etc.
 
 ## API Endpoints
 
@@ -52,6 +58,18 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) for the checkout page.
 | GET | `/api/payments/receipt/{id}` | Receipt data |
 | GET | `/api/payments/{id}` | Payment details |
 | POST | `/api/payments/refund` | Refund a payment |
+
+**Admin (header `X-Admin-Token` = `ADMIN_API_KEY`):**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/admin/siem/dashboard` | Summary, top IPs, thresholds |
+| GET | `/api/admin/siem/events` | Recent request events |
+| GET | `/api/admin/siem/blocked` | IP blocklist |
+| POST | `/api/admin/siem/block` | Body `{"ip":"1.2.3.4"}` |
+| POST | `/api/admin/siem/unblock` | Body `{"ip":"1.2.3.4"}` |
+
+Payment and refund IDs use `secrets.token_hex(16)` (128-bit) with prefixes `pay_` / `ref_`.
 
 ## Project Structure
 

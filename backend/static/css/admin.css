@@ -1,0 +1,136 @@
+.admin-main {
+  max-width: 900px;
+}
+
+.admin-sub {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.admin-sub code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+.admin-auth-card {
+  margin-bottom: 1rem;
+}
+
+.admin-auth-card .submit-btn {
+  margin-top: 0.75rem;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.admin-stat {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+}
+
+.admin-stat strong {
+  display: block;
+  font-size: 1.25rem;
+  font-family: var(--font-mono);
+}
+
+.admin-stat span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  margin-top: 0.75rem;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.admin-table code {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.row-suspicious {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.btn-block {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.btn-block:hover {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.btn-unblock {
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.admin-blocked-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.admin-blocked-list li {
+  display: flex;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.admin-events {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.admin-error {
+  margin-top: 1rem;
+}
+
+.hidden {
+  display: none !important;
+}
